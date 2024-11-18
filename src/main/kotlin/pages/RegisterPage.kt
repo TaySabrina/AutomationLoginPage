@@ -32,7 +32,7 @@ class RegisterPage( driver: WebDriver): BasePage(driver) {
     lateinit var emailInformation: WebElement
 
     @FindBy(xpath = "//input[@data-qa='password']")
-    lateinit var passwordInformation: WebElement
+    lateinit var paswInformation: WebElement
 
     @FindBy(id = "days")
    lateinit var dateOfBirth:WebElement
@@ -124,7 +124,7 @@ class RegisterPage( driver: WebDriver): BasePage(driver) {
     }
 
     fun fillPasswordInfo(registerPassword: String){
-        passwordInformation.sendKeys(registerPassword)
+        paswInformation.sendKeys(registerPassword)
     }
 
     fun selectDateOfBirth(day: String){
