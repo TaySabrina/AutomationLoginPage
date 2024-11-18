@@ -38,6 +38,18 @@ class RegisterTest {
         }
     }
 
+    @Test
+    fun testUserRegistrationWithInvalidEmail(){
+        registerPage.fillName("João Souza Silva")
+        registerPage.fillEmail("invalid-email")
+        registerPage.submitSignup()
+
+        val errorMessage = registerPage.getValidationMessage()
+        assertEquals("Preencha este campo.", errorMessage, "The error message is incorrect!")
+    }
+
+
+
     @AfterEach
     fun tearDown(){
         registerPage.closeBrowser()
