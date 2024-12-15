@@ -23,3 +23,22 @@
   - Verifies the redirection to te expected signup page using an assertion on the current URL
   - Optionally prints the page title
 - Tear Down: closes the browser after each test to clean up resources
+-----
+
+***Refactoring and Improvements***    
+I refactored the code and used Page Factory as an improvement.   
+I also implemented new locators, which I will use soon for additional tests. Additionally, I included a new test to validate other data inputs.
+
+Page Factory
+The Page Factory design pattern is used in this project to efficiently initialize and manage web element locators.   
+By using the @FindBy annotation, it maps elements such as input fields, buttons, and checkboxes to variables in the page object class.   
+This helps keep the test code clean, organized, and easier to maintain.
+
+**Key Features:**  
+**@FindBy Annotations:** Locates elements using identifiers like name, xpath, id, etc.  
+**PageFactory.initElements():** Initializes the elements on page load, linking the locators with the web elements.  
+**Maintainability:** If a locator changes, it only needs to be updated in the page class, not throughout the test code.  
+**Reusability:** Methods for interacting with elements can be reused across multiple tests.  
+**Organization:** Keeps locators and actions related to a page in a single class for better structure and clarity.  
+
+Using Page Factory helps create a scalable, efficient, and easily maintainable test automation framework.
