@@ -28,7 +28,7 @@
 ***Refactoring and Improvements***    
 
 I refactored the code and used Page Factory as an improvement.   
-I also implemented new locators, which I will use soon for additional tests. Additionally, I included a new test to validate other data inputs.
+I also implemented new locators, which I will use soon for additional tests.
 
 Page Factory
 The Page Factory design pattern is used in this project to efficiently initialize and manage web element locators.   
