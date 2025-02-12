@@ -12,16 +12,16 @@
   
 ------
 ***RegisterPage: represents the registration page in the POM pattern. It extends `BasePage` and provides:***
-- **nameField, emailField and signupButton**: locates, name by name atribute, email and signup button by xpath selector
-- **key methods**: fillName (name:String), fillEmail (email: String) and submitSignup()
+- **All locators and functions used in RegisterTest**
 ------   
-***RegisterTest: automates a user registration flow using Selenium and JUnit. It focuses on testing the functionality of the `RegisterPage:`***
+***RegisterTest: automates a user registration flow using Selenium and JUnit:***
 - Setup: Initializes the Chrome WebDriver and navigates to the login page before each test
 - Test Method:
   - Fills the user's name and email using the `RegisterPage` methods
   - Submits the form by clicking the signup button
   - Verifies the redirection to te expected signup page using an assertion on the current URL
   - Optionally prints the page title
+  - Completes user registration using an assertion to confirm it
 - Tear Down: closes the browser after each test to clean up resources
 -----
 
@@ -30,7 +30,7 @@
 I refactored the code and used Page Factory as an improvement.   
 I also implemented new locators, which I will use soon for additional tests.
 
-Page Factory
+***Page Factory***
 The Page Factory design pattern is used in this project to efficiently initialize and manage web element locators.   
 By using the @FindBy annotation, it maps elements such as input fields, buttons, and checkboxes to variables in the page object class.   
 This helps keep the test code clean, organized, and easier to maintain.
