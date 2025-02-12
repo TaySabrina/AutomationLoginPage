@@ -4,6 +4,14 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.FindBy
 import org.openqa.selenium.support.PageFactory
+import io.github.cdimascio.dotenv.dotenv
+import org.openqa.selenium.By
+import org.openqa.selenium.JavascriptExecutor
+import org.openqa.selenium.support.ui.ExpectedConditions
+import org.openqa.selenium.support.ui.Select
+import org.openqa.selenium.support.ui.WebDriverWait
+import java.time.Duration
+
 
 class RegisterPage( driver: WebDriver): BasePage(driver) {
 
@@ -19,10 +27,10 @@ class RegisterPage( driver: WebDriver): BasePage(driver) {
 
 
     // Account Information
-    @FindBy(id = "id_gender1")
+    @FindBy(xpath = "//input[@type='radio' and @value='Mr']")
     lateinit var titleMaleRadioButton: WebElement
 
-    @FindBy(name = "id_gender2")
+    @FindBy(xpath = "//input[@type='radio' and @value='Mrs']")
     lateinit var titleFemaleRadioButton:WebElement
 
     @FindBy(xpath = "//input[@data-qa='name']")
@@ -43,10 +51,10 @@ class RegisterPage( driver: WebDriver): BasePage(driver) {
     @FindBy(id = "years")
     lateinit var yearOfBirth: WebElement
 
-    @FindBy(id = "uniform-newsletter")
+    @FindBy(id = "newsletter")
     lateinit var newsletterCheckBox: WebElement
 
-    @FindBy(id = "uniform-optin")
+    @FindBy(id = "optin")
     lateinit var offersCheckBox: WebElement
 
 
@@ -67,7 +75,7 @@ class RegisterPage( driver: WebDriver): BasePage(driver) {
     lateinit var address2: WebElement
 
     @FindBy(id = "country")
-    lateinit var country: WebElement
+    lateinit var countryDropdown: WebElement
 
     @FindBy(xpath = "//input[@data-qa='state']")
     lateinit var stateName: WebElement
@@ -81,7 +89,7 @@ class RegisterPage( driver: WebDriver): BasePage(driver) {
     @FindBy(id = "mobile_number")
     lateinit var mobileNumber: WebElement
 
-    @FindBy(xpath = "//input[@data-qa='create-account']")
+    @FindBy(xpath = "//button[@data-qa='create-account']")
     lateinit var createAccountButton: WebElement
 
     @FindBy(name = "email")
@@ -107,12 +115,16 @@ class RegisterPage( driver: WebDriver): BasePage(driver) {
     }
 
     // Account Information Functions
-    fun selectMaleTitle(){
-        titleMaleRadioButton.click()
+    fun selectMaleTitle() {
+        val wait = WebDriverWait(driver, Duration.ofSeconds(5))
+        val radioButton = wait.until(ExpectedConditions.elementToBeClickable(titleMaleRadioButton))
+        radioButton.click()
     }
 
     fun selectFemaleTitle(){
-        titleFemaleRadioButton.click()
+        val wait = WebDriverWait(driver, Duration.ofSeconds(5))
+        val radioButton = wait.until(ExpectedConditions.elementToBeClickable(titleFemaleRadioButton))
+        radioButton.click()
     }
 
     fun fillNameInfo(fullName: String){
@@ -123,8 +135,11 @@ class RegisterPage( driver: WebDriver): BasePage(driver) {
         emailInformation.sendKeys(registerEmail)
     }
 
-    fun fillPasswordInfo(registerPassword: String){
-        paswInformation.sendKeys(registerPassword)
+    fun fillPasswordInfo() {
+        val dotenv = dotenv()
+        val password = dotenv["TEST_PASSWORD"] ?: throw IllegalStateException("Password not found")
+
+        paswInformation.sendKeys(password)
     }
 
     fun selectDateOfBirth(day: String){
@@ -140,10 +155,15 @@ class RegisterPage( driver: WebDriver): BasePage(driver) {
     }
 
     fun checkNewsletter(){
+        val js = driver as JavascriptExecutor
+        js.executeScript("arguments[0].scrollIntoView(true);", newsletterCheckBox)
         newsletterCheckBox.click()
+
     }
 
     fun checkOffers(){
+        val js = driver as JavascriptExecutor
+        js.executeScript("arguments[0].scrollIntoView(true);", offersCheckBox)
         offersCheckBox.click()
     }
 
@@ -168,8 +188,9 @@ class RegisterPage( driver: WebDriver): BasePage(driver) {
         address2.sendKeys(secondAddress)
     }
 
-    fun selectCountry(countrySelection: String){
-        country.sendKeys(countrySelection)
+    fun selectCountry(countryName: String){
+        val select = Select(countryDropdown)
+        select.selectByVisibleText(countryName)
     }
 
     fun fillStateName(state: String){
@@ -194,5 +215,14 @@ class RegisterPage( driver: WebDriver): BasePage(driver) {
 
     fun getValidationMessage(): String? {
         return emailInput.getAttribute("validationMessage")
+    }
+
+    fun isAccountCreated(): Boolean {
+        val successMessage = "//h2[contains(text(), 'ACCOUNT CREATED!)']"
+        return try{
+            driver.findElement(By.xpath(successMessage)).isDisplayed
+        } catch (e: NoSuchElementException){
+            false
+        }
     }
 }
